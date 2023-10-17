@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "mongoose": "^7.6.1",
+    "path": "^0.12.7"
+  },
+  "name": "l07_tare_alfre",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Alfredo",
+  "license": "ISC",
+  "keywords": [],
+  "description": ""
+}
+

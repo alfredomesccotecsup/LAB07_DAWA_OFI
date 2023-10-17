@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My Movie App - Movies</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      background-color: #007bff;
+      color: #fff;
+      padding: 15px 0;
+      margin: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    li {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin: 10px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      font-size: 20px;
+      margin: 0;
+      color: #007bff;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 15px;
+      border-radius: 5px;
+    }
+
+    p {
+      margin: 10px 0;
+    }
+
+    strong {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .add-movie-button {
+      display: block;
+      text-align: center;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin: 20px auto;
+      display: inline-block;
+    }
+
+    .add-movie-button:hover {
+      background-color: #0056b3;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .action-button {
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .like-button {
+      background-color: #007bff;
+    }
+
+    .favorite-button {
+      background-color: #ffaa00;
+    }
+
+    .watched-button {
+      background-color: #28a745;
+    }
+
+    .review-button {
+      background-color: #ffc107;
+    }
+
+    .share-button {
+      background-color: #17a2b8;
+    }
+
+    .action-button:hover {
+      opacity: 0.9;
+    }
+    .add-movie-button {
+      display: block;
+      text-align: center;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      margin: 20px auto;
+      display: inline-block;
+    }
+
+    /* Estilos para el botón de volver al formulario */
+    .back-to-form-button {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .popup p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Movies</h1>
+  <ul>
+    <% movies.forEach(movie=> { %>
+      <li>
+        <h3>
+          <%= movie.title %>
+        </h3>
+        <img src="<%= movie.imageURL %>" alt="<%= movie.title %> Poster">
+        <p><strong>Directed by:</strong> <%= movie.director %>
+        </p>
+        <p><strong>Released in:</strong> <%= movie.releaseYear %>
+        </p>
+        <p><strong>Description:</strong> <%= movie.description %>
+        </p>
+        <p><strong>Genre:</strong> <%= movie.genre %>
+        </p>
+        <p><strong>Rating:</strong> <%= movie.rating %> / 10
+        </p>
+        <div class="action-buttons">
+          <button class="action-button like-button" onclick="performAction('like', '<%= movie._id %>')">
+            <i class="fas fa-thumbs-up"></i> Like
+          </button>
+          <button class="action-button favorite-button" onclick="performAction('favorite', '<%= movie._id %>')">
+            <i class="fas fa-star"></i> Favorite
+          </button>
+          <button class="action-button watched-button" onclick="performAction('watched', '<%= movie._id %>')">
+            <i class="fas fa-eye"></i> Mark as Watched
+          </button>
+          <button class="action-button review-button" onclick="performAction('review', '<%= movie._id %>')">
+            <i class="fas fa-pencil-alt"></i> Write a Review
+          </button>
+          <button class="action-button share-button" onclick="performAction('share', '<%= movie._id %>')">
+            <i class="fas fa-share-square"></i> Share
+          </button>
+        </div>
+      </li>
+      <% }); %>
+  </ul>
+
+  <div class="overlay" id="popup">
+    <div class="popup">
+      <p id="popup-message"></p>
+      <button onclick="closePopup()">Close</button>
+    </div>
+  </div>
+
+  <a href="/index" class="back-to-form-button">Add Another Movie</a>
+
+  <script>
+    
+    function showPopup(message) {
+      const popup = document.getElementById("popup");
+      const popupMessage = document.getElementById("popup-message");
+      popupMessage.textContent = message;
+      popup.style.display = "flex";
+    }
+
+    
+    function closePopup() {
+      const popup = document.getElementById("popup");
+      popup.style.display = "none";
+    }
+
+    
+    function performAction(action, movieId) {
+      switch (action) {
+        case 'like':
+          showPopup('You liked this movie!');
+          break;
+        case 'favorite':
+          showPopup('Added to favorites!');
+          break;
+        case 'watched':
+          showPopup('Marked as watched!');
+          break;
+        case 'review':
+          showPopup('Write a review!');
+          break;
+        case 'share':
+          showPopup('Share this movie!');
+          break;
+        default:
+          break;
+      }
+    }
+  </script>
+</body>
+
+</html>
